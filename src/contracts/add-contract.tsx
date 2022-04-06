@@ -5,12 +5,11 @@ import { Contract, ContractInterface } from "ethers";
 import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
-import { store, addContract } from "./store";
+import { addContract, store } from "../store";
 
 export function showAddContractModal() {
   let address = "";
   let abi: ContractInterface;
-
   const state = observable({ fileList: observable.array<RcFile>() });
   const ContractForm = observer(() => {
     const { fileList } = state;
@@ -50,7 +49,6 @@ export function showAddContractModal() {
       </Form>
     );
   });
-
   Modal.confirm({
     maskClosable: true,
     icon: null,

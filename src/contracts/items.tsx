@@ -1,14 +1,15 @@
 import { observer } from "mobx-react-lite";
 import * as React from "react";
-import { store } from "./store";
+import { store } from "../store";
 import { List, Typography, Tag } from "antd";
+import { Link } from "react-router-dom";
 
-export const Contracts = observer(() => {
+export const Items = observer(() => {
   const { contracts } = store;
 
   return (
     <List>
-      {contracts.map(({ address, contract }) => {
+      {contracts.map(({ address, contract }, index) => {
         const functions = Object.keys(contract.functions).filter((i) =>
           i.includes("(")
         );
@@ -20,17 +21,11 @@ export const Contracts = observer(() => {
           </Typography.Text>
         );
         return (
-          <a
-            href=""
-            key={address}
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <List.Item>
+          <Link to={`/contract/${index}`} key={address}>
+            <List.Item style={{ paddingTop: 0, paddingBottom: 16 }}>
               <List.Item.Meta title={address} description={description} />
             </List.Item>
-          </a>
+          </Link>
         );
       })}
     </List>

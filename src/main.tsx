@@ -1,15 +1,28 @@
-import { Button, Space } from "antd";
+import { WalletOutlined } from "@ant-design/icons";
+import { Button, Layout, PageHeader, Tooltip } from "antd";
+import { Content } from "antd/lib/layout/layout";
+import { observer } from "mobx-react-lite";
 import * as React from "react";
-import { showAddContractModal } from "./add-contract";
-import { Contracts } from "./contracts";
+import { Outlet } from "react-router-dom";
+import { store } from "./store";
 
-export function Main() {
+export const Main = observer(() => {
+  const { signer } = store;
   return (
-    <Space style={{ padding: 16, width: "100%" }} direction="vertical">
-      <Contracts />
-      <Button type="primary" onClick={showAddContractModal}>
-        Add contract
-      </Button>
-    </Space>
+    <Layout>
+      <PageHeader
+        extra={[
+          <Tooltip
+            title={signer?._address ?? "Connect wallet"}
+            placement="left"
+          >
+            <Button type="primary" shape="circle" icon={<WalletOutlined />} />
+          </Tooltip>,
+        ]}
+      />
+      <Content>
+        <Outlet />
+      </Content>
+    </Layout>
   );
-}
+});
