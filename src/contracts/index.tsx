@@ -1,24 +1,29 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Row } from "antd";
+import { Button } from "antd";
+import { runInAction } from "mobx";
 import * as React from "react";
 import { Body } from "../components/body";
+import { store } from "../store";
 import { showAddContractModal } from "./add-contract";
 import { Items } from "./items";
 
 export function ContractsPage() {
+  React.useEffect(() => {
+    runInAction(() => {
+      store.title = "";
+      store.subTitle = "";
+    });
+  }, []);
   return (
     <Body>
       <Items />
-      <br />
-      <Row justify="center">
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={showAddContractModal}
-        >
-          Add contract
-        </Button>
-      </Row>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={showAddContractModal}
+      >
+        Add contract
+      </Button>
     </Body>
   );
 }

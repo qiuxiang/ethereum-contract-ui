@@ -16,7 +16,9 @@ export const Items = observer(() => {
         const description = (
           <Typography.Text type="secondary" ellipsis>
             {functions.map((i) => (
-              <Tag key={i}>{i}</Tag>
+              <Tag color="blue" key={i}>
+                {i}
+              </Tag>
             ))}
           </Typography.Text>
         );
