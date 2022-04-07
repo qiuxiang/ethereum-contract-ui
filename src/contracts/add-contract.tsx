@@ -2,10 +2,11 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Modal } from "antd";
 import Upload, { RcFile } from "antd/lib/upload";
 import { Contract, ContractInterface } from "ethers";
+import { isAddress } from "ethers/lib/utils";
 import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
-import { addContract, store } from "../store";
+import { addContract } from "../store";
 
 export function showAddContractModal() {
   let address = "";
@@ -31,7 +32,7 @@ export function showAddContractModal() {
                 if (!Array.isArray(abi)) {
                   abi = (abi as any).abi;
                 }
-                new Contract(address, abi, store.signer!);
+                new Contract(address, abi);
               } catch (e) {
                 message.error(`Invalid ABI: ${(e as any).message}`);
                 return false;
@@ -59,13 +60,13 @@ export function showAddContractModal() {
         throw e;
       }
 
-      if (!address) {
-        return throwError("Contract address is required");
+      if (!isAddress(address)) {
+        return throwError("Contract address invalid");
       }
 
       const { fileList } = state;
       if (fileList.length == 0) {
-        return throwError("ABI file is required");
+        return throwError("ABI file required");
       }
 
       addContract(address, abi);

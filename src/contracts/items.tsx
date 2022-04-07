@@ -22,7 +22,7 @@ export const Items = observer(() => {
         );
         return (
           <Link to={`/contract/${index}`} key={address}>
-            <List.Item style={{ paddingTop: 0, paddingBottom: 16 }}>
+            <List.Item style={{ paddingTop: 0, paddingBottom: 24 }}>
               <List.Item.Meta title={address} description={description} />
             </List.Item>
           </Link>

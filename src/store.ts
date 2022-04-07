@@ -8,27 +8,40 @@ interface ContractConfig {
   contract: Contract;
 }
 
-export const store = observable({
-  connected: false,
+const initialStore = {
   contracts: <ContractConfig[]>[],
-  signer: <JsonRpcSigner | null>null,
-});
+};
 
-async function init() {
+interface OptionalStore {
+  signer?: JsonRpcSigner;
+  provider?: Web3Provider;
+}
+
+export const store = observable<typeof initialStore & OptionalStore>(
+  initialStore
+);
+
+export async function init() {
+  const ethereum = Reflect.get(window, "ethereum");
+  if (!ethereum) return;
+
+  runInAction(() => (store.provider = new Web3Provider(ethereum)));
+  connectWallet();
+  loadContracts();
+}
+
+export async function connectWallet() {
   const ethereum = Reflect.get(window, "ethereum");
   if (!ethereum) return;
 
   const [address] = await ethereum.request({
     method: "eth_requestAccounts",
   });
-
-  store.connected = true;
-  store.signer = new Web3Provider(ethereum).getSigner(address);
-  loadContracts();
+  store.signer = store.provider?.getSigner(address);
 }
 
 export function addContract(address: string, abi: ContractInterface) {
-  const contract = new Contract(address, abi, store.signer!);
+  const contract = new Contract(address, abi);
   store.contracts.push({ abi, address, contract });
   saveContracts();
 }
@@ -38,7 +51,7 @@ function loadContracts() {
     const contracts = JSON.parse(localStorage.getItem("contracts")!);
     runInAction(() => {
       store.contracts = contracts.map(({ address, abi }: ContractConfig) => {
-        const contract = new Contract(address, abi, store.signer!);
+        const contract = new Contract(address, abi);
         return { abi, address, contract };
       });
     });

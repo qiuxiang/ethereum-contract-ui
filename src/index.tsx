@@ -4,13 +4,13 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { ContractPage } from "./contract";
 import { ContractsPage } from "./contracts";
 import "./index.css";
-import { Main } from "./main";
+import { MainLayout } from "./layout";
 import "./store";
 
 render(
   <HashRouter>
     <Routes>
-      <Route path="/" element={<Main />}>
+      <Route path="/" element={<MainLayout />}>
         <Route index element={<ContractsPage />} />
         <Route path="contract/:index" element={<ContractPage />} />
       </Route>

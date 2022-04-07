@@ -1,4 +1,5 @@
-import { Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Row } from "antd";
 import * as React from "react";
 import { Body } from "../components/body";
 import { showAddContractModal } from "./add-contract";
@@ -8,9 +9,16 @@ export function ContractsPage() {
   return (
     <Body>
       <Items />
-      <Button type="primary" onClick={showAddContractModal}>
-        Add contract
-      </Button>
+      <br />
+      <Row justify="center">
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={showAddContractModal}
+        >
+          Add contract
+        </Button>
+      </Row>
     </Body>
   );
 }
