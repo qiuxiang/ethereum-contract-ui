@@ -1,15 +1,16 @@
 import { UploadOutlined } from "@ant-design/icons";
+import { JsonFragment } from "@ethersproject/abi";
 import { Button, Form, Input, message, Modal } from "antd";
 import Upload, { RcFile } from "antd/lib/upload";
-import { Contract, ContractInterface } from "ethers";
+import { Contract } from "ethers";
 import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
-import { store, addContract } from "./store";
+import { addContract, store } from "./store";
 
 export function showAddContractModal() {
   let address = "";
-  let abi: ContractInterface;
+  let abi: JsonFragment[];
 
   const state = observable({ fileList: observable.array<RcFile>() });
   const ContractForm = observer(() => {

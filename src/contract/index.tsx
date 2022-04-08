@@ -1,4 +1,4 @@
-import { Alert, Tabs } from "antd";
+import { Alert, Badge, Tabs } from "antd";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
@@ -15,20 +15,19 @@ export const ContractPage = observer(() => {
   React.useEffect(() => init(index), []);
   const { getter, setter } = state;
   return (
-    <>
-      <Body>
-        <Tabs onChange={() => {}}>
-          <Tabs.TabPane tab="Read" key="read">
-            <Functions items={getter} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Write" key="write">
-            <Functions items={setter} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Events" key="events">
-            Content of Tab Pane 3
-          </Tabs.TabPane>
-        </Tabs>
-      </Body>
-    </>
+    <Body>
+      <Tabs onChange={() => {}}>
+        <Tabs.TabPane tab="Read" key="read">
+          <Functions items={getter} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Write" key="write">
+          <Functions items={setter} />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          tab={<Badge count={2}>Events</Badge>}
+          key="events"
+        ></Tabs.TabPane>
+      </Tabs>
+    </Body>
   );
 });

@@ -7,12 +7,8 @@ import { Outputs } from "./outputs";
 import { state } from "./state";
 import { Uint256Input } from "./uint256-input";
 
-export const FunctionForm = ({
-  name,
-  inputs,
-  outputs,
-  stateMutability,
-}: JsonFragment) => {
+export const FunctionForm = (props: JsonFragment) => {
+  const { name, inputs, outputs, stateMutability } = props;
   const readonly = stateMutability == "view";
   const [loading, setLoading] = React.useState(false);
   const [output, setOutput] = React.useState<any>();
@@ -66,7 +62,7 @@ export const FunctionForm = ({
 
 function processInput(value: any, type: string) {
   if (type == "uint256") {
-    return parseUnits(value.value, value.unit);
+    return value ? parseUnits(value.value, value.unit) : 0;
   }
   if (type.match(/^(u?int)([0-9]*)$/)) {
     return value ? parseUnits(value, 0) : 0;
