@@ -1,20 +1,20 @@
 import { JsonFragment } from "@ethersproject/abi";
-import { Collapse } from "antd";
+import { Collapse, Empty } from "antd";
 import * as React from "react";
-import { InputItem } from "./input-item";
+import { FunctionForm } from "./function-form";
 
-interface Props {
-  functions: JsonFragment[];
-}
+export const Functions = ({ items }: { items: JsonFragment[] }) => {
+  if (items.length == 0) return <Empty />;
 
-export const Functions = ({ functions }: Props) => (
-  <Collapse>
-    {functions.map((i) => {
-      return (
-        <Collapse.Panel header={i.name} key={i.name!}>
-          <InputItem item={i} />
-        </Collapse.Panel>
-      );
-    })}
-  </Collapse>
-);
+  return (
+    <Collapse>
+      {items.map((i) => {
+        return (
+          <Collapse.Panel header={i.name} key={i.name!}>
+            <FunctionForm {...i} />
+          </Collapse.Panel>
+        );
+      })}
+    </Collapse>
+  );
+};

@@ -19,10 +19,10 @@ export const ContractPage = observer(() => {
       <Body>
         <Tabs onChange={() => {}}>
           <Tabs.TabPane tab="Read" key="read">
-            <Functions functions={getter} />
+            <Functions items={getter} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Write" key="write">
-            <Functions functions={setter} />
+            <Functions items={setter} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Events" key="events">
             Content of Tab Pane 3
