@@ -18,7 +18,7 @@ export const Outputs = ({ types = [], data }: Props) => {
 
   if (Array.isArray(data)) {
     return (
-      <Descriptions bordered>
+      <Descriptions size="small" bordered>
         {data.map((item, index) => (
           <Descriptions.Item key={index} label={types[index].name}>
             <OutputItem type={types[index]} item={item} />

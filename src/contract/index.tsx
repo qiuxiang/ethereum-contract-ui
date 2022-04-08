@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
 import { Body } from "../components/body";
+import { Events } from "./events";
 import { Functions } from "./functions";
 import { init, state } from "./state";
 
@@ -23,11 +24,14 @@ export const ContractPage = observer(() => {
         <Tabs.TabPane tab="Write" key="write">
           <Functions items={setter} />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={<Badge count={2}>Events</Badge>}
-          key="events"
-        ></Tabs.TabPane>
+        <Tabs.TabPane tab={<EventsTab />} key="events">
+          <Events />
+        </Tabs.TabPane>
       </Tabs>
     </Body>
   );
+});
+
+const EventsTab = observer(() => {
+  return <Badge count={state.unreadEvents}>Events</Badge>;
 });

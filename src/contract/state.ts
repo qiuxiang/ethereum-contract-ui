@@ -1,5 +1,5 @@
 import { JsonFragment } from "@ethersproject/abi";
-import { Contract } from "ethers";
+import { Contract, Event } from "ethers";
 import { observable, runInAction } from "mobx";
 import { store } from "../store";
 
@@ -8,6 +8,8 @@ export const state = observable({
   getter: <JsonFragment[]>[],
   setter: <JsonFragment[]>[],
   contract: null as unknown as Contract,
+  events: new Map<string, Event>(),
+  unreadEvents: 0,
 });
 
 export function init(index: number) {
@@ -19,5 +21,12 @@ export function init(index: number) {
     state.setter = functions.filter((i) => i.stateMutability != "view");
     store.title = "Contract";
     store.subTitle = address;
+  });
+  state.contract.on({}, (event: Event) => {
+    if (state.events.has(event.transactionHash)) return;
+    runInAction(() => {
+      state.events.set(event.transactionHash, event);
+      state.unreadEvents += 1;
+    });
   });
 }
