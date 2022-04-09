@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm i vite
-      - run: npm run build
-      - run: rm -r node_modules
+      - run: npm i esbuild
+      - run: npm run build -- --minify
+      - run: rm -r src node_modules .gitignore package-lock.json tsconfig.json package.json
       - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: gh-pages

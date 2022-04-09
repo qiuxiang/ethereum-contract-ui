@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "start": "vite",
-    "build": "esbuild src/index.tsx --bundle --minify --sourcemap --outdir=dist"
+    "build": "esbuild src/index.tsx --bundle --outdir=dist"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
