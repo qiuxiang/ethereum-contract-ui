@@ -1,5 +1,9 @@
 import { JsonFragment } from "@ethersproject/abi";
-import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
+import {
+  ExternalProvider,
+  JsonRpcSigner,
+  Web3Provider,
+} from "@ethersproject/providers";
 import { Contract } from "ethers";
 import { observable, runInAction } from "mobx";
 import { NavigateFunction } from "react-router-dom";
@@ -17,9 +21,14 @@ const initialStore = {
   subTitle: "",
 };
 
+interface MetaMaskEthereumProvider {
+  on(eventName: string | symbol, listener: (...args: any[]) => void): this;
+}
+
 interface OptionalStore {
-  signer?: JsonRpcSigner;
+  ethereum?: ExternalProvider & MetaMaskEthereumProvider;
   provider?: Web3Provider;
+  signer?: JsonRpcSigner;
 }
 
 export const store = observable<typeof initialStore & OptionalStore>(
@@ -27,22 +36,25 @@ export const store = observable<typeof initialStore & OptionalStore>(
 );
 
 export async function init() {
-  const ethereum = Reflect.get(window, "ethereum");
-  if (!ethereum) return;
-
-  runInAction(() => (store.provider = new Web3Provider(ethereum)));
-  connectWallet();
   loadContracts();
+  store.ethereum = Reflect.get(window, "ethereum");
+  if (store.ethereum) {
+    runInAction(() => (store.provider = new Web3Provider(store.ethereum!)));
+    updateSigner((await store.provider?.listAccounts()) ?? []);
+    store.ethereum.on("accountsChanged", updateSigner);
+  }
+}
+
+function updateSigner([account]: string[]) {
+  if (account) {
+    runInAction(() => (store.signer = store.provider?.getSigner(account)));
+  }
 }
 
 export async function connectWallet() {
-  const ethereum = Reflect.get(window, "ethereum");
-  if (!ethereum) return;
-
-  const [address] = await ethereum.request({
-    method: "eth_requestAccounts",
-  });
-  runInAction(() => (store.signer = store.provider?.getSigner(address)));
+  updateSigner(
+    (await store.ethereum?.request?.({ method: "eth_requestAccounts" })) ?? []
+  );
 }
 
 export function addContract(address: string, abi: JsonFragment[]) {

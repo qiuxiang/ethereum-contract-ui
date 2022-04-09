@@ -32,6 +32,6 @@ export const ContractPage = observer(() => {
   );
 });
 
-const EventsTab = observer(() => {
-  return <Badge count={state.unreadEvents}>Events</Badge>;
-});
+const EventsTab = observer(() => (
+  <Badge count={state.events.size}>Events</Badge>
+));

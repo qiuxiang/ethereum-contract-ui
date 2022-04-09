@@ -9,7 +9,6 @@ export const state = observable({
   setter: <JsonFragment[]>[],
   contract: null as unknown as Contract,
   events: new Map<string, Event>(),
-  unreadEvents: 0,
 });
 
 export function init(index: number) {
@@ -23,10 +22,8 @@ export function init(index: number) {
     store.subTitle = address;
   });
   state.contract.on({}, (event: Event) => {
-    if (state.events.has(event.transactionHash)) return;
-    runInAction(() => {
-      state.events.set(event.transactionHash, event);
-      state.unreadEvents += 1;
-    });
+    if (!state.events.has(event.transactionHash)) {
+      runInAction(() => state.events.set(event.transactionHash, event));
+    }
   });
 }

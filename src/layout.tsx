@@ -1,5 +1,5 @@
 import { WalletOutlined } from "@ant-design/icons";
-import { Button, Layout, PageHeader, Row } from "antd";
+import { Button, Layout, PageHeader } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
@@ -18,27 +18,24 @@ export const MainLayout = observer(() => {
         title={title}
         subTitle={subTitle}
         extra={[
-          signer && (
+          signer ? (
             <Button key="address" icon={<WalletOutlined />} shape="round">
               {signer?._address}
             </Button>
-          ),
-        ]}
-      />
-      <Content>
-        {signer ? (
-          <Outlet />
-        ) : (
-          <Row justify="center">
+          ) : (
             <Button
+              key="connect"
               icon={<WalletOutlined />}
               type="primary"
               onClick={connectWallet}
             >
               Connect wallet
             </Button>
-          </Row>
-        )}
+          ),
+        ]}
+      />
+      <Content>
+        <Outlet />
       </Content>
     </Layout>
   );
