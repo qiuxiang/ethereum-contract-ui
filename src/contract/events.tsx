@@ -5,14 +5,12 @@ import * as React from "react";
 import { state } from "./state";
 import { ExplorerLink } from "../components/explorer-link";
 
-export const Events = observer(() => {
-  return (
-    <List
-      dataSource={Array.from(state.events.values())}
-      renderItem={(item) => <Item item={item} />}
-    />
-  );
-});
+export const Events = observer(() => (
+  <List
+    dataSource={Array.from(state.events.values())}
+    renderItem={(item) => <Item item={item} />}
+  />
+));
 
 const Item = ({ item }: { item: Event }) => {
   const { filters } = state.contract;

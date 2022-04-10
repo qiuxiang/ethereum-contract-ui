@@ -52,9 +52,11 @@ function updateSigner([account]: string[]) {
 }
 
 export async function connectWallet() {
-  updateSigner(
-    (await store.ethereum?.request?.({ method: "eth_requestAccounts" })) ?? []
-  );
+  const request = { method: "eth_requestAccounts" };
+  try {
+    const accounts = await store.ethereum?.request?.(request);
+    updateSigner(accounts ?? []);
+  } catch (_) {}
 }
 
 export function addContract(address: string, abi: JsonFragment[]) {
