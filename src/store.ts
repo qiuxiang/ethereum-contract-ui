@@ -5,24 +5,28 @@ import {
   Web3Provider,
 } from "@ethersproject/providers";
 import { Contract } from "ethers";
+import { hexlify } from "ethers/lib/utils";
 import { observable, runInAction } from "mobx";
+import React from "react";
 import { NavigateFunction } from "react-router-dom";
 
-interface ContractConfig {
+export interface ContractConfig {
   abi: JsonFragment[];
   address: string;
   contract: Contract;
 }
 
 const initialStore = {
-  contracts: <ContractConfig[]>[],
+  contracts: observable.array<ContractConfig>([]),
   navigate: <NavigateFunction>(() => {}),
-  title: "",
-  subTitle: "",
+  title: <React.ReactNode>"",
+  subTitle: <React.ReactNode>"",
+  chainId: 0,
 };
 
 interface MetaMaskEthereumProvider {
   on(eventName: string | symbol, listener: (...args: any[]) => void): this;
+  chainId: string;
 }
 
 interface OptionalStore {
@@ -38,10 +42,14 @@ export const store = observable<typeof initialStore & OptionalStore>(
 export async function init() {
   loadContracts();
   store.ethereum = Reflect.get(window, "ethereum");
-  if (store.ethereum) {
-    runInAction(() => (store.provider = new Web3Provider(store.ethereum!)));
+  const { ethereum } = store;
+  if (ethereum) {
+    runInAction(() => {
+      store.provider = new Web3Provider(ethereum);
+      store.chainId = parseInt(ethereum.chainId, 16);
+    });
     updateSigner((await store.provider?.listAccounts()) ?? []);
-    store.ethereum.on("accountsChanged", updateSigner);
+    ethereum.on("accountsChanged", updateSigner);
   }
 }
 
