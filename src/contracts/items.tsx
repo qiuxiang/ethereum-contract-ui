@@ -10,7 +10,7 @@ export const Items = observer(() => {
   const { contracts } = store;
   return (
     <List>
-      {contracts.map((item, index) => {
+      {contracts.map((item) => {
         const { address, contract } = item;
         const functions = Object.keys(contract.functions).filter((i) =>
           i.includes("(")
@@ -25,7 +25,7 @@ export const Items = observer(() => {
           </Typography.Text>
         );
         return (
-          <Link to={`/contract/${index}`} key={address}>
+          <Link to={`/contract/${address}`} key={address}>
             <List.Item style={{ paddingTop: 0, paddingBottom: 24 }}>
               <List.Item.Meta
                 className={css.item}

@@ -11,7 +11,7 @@ render(
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<ContractsPage />} />
-        <Route path="contract/:index" element={<ContractPage />} />
+        <Route path="contract/:address" element={<ContractPage />} />
       </Route>
     </Routes>
   </HashRouter>,

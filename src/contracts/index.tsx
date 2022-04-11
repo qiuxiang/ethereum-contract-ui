@@ -10,7 +10,7 @@ import { Items } from "./items";
 export function ContractsPage() {
   React.useEffect(() => {
     runInAction(() => {
-      store.title = "";
+      store.title = "Contracts";
       store.subTitle = "";
     });
   }, []);

@@ -8,13 +8,18 @@ import { Functions } from "./functions";
 import { init, state } from "./state";
 
 export const ContractPage = observer(() => {
-  const match = useMatch("/contract/:index");
-  const index = parseInt(match?.params?.index ?? "");
-  if (isNaN(index)) {
-    return <Alert type="error" message={`Invalid contract index ${index}`} />;
+  const address = useMatch("/contract/:address")?.params?.address;
+  React.useEffect(() => init(address ?? ""), []);
+
+  const { getter, setter, contract } = state;
+  if (!contract) {
+    return (
+      <Body>
+        <Alert type="error" message={`Contract ${address} not exists`} />
+      </Body>
+    );
   }
-  React.useEffect(() => init(index), []);
-  const { getter, setter } = state;
+
   return (
     <Body>
       <Tabs onChange={() => {}}>
