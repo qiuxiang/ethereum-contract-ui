@@ -20,7 +20,7 @@ const initialStore = {
   navigate: <NavigateFunction>(() => {}),
   title: <React.ReactNode>"",
   subTitle: <React.ReactNode>"",
-  chainId: 0,
+  chainId: 1,
 };
 
 interface MetaMaskEthereumProvider {
@@ -84,7 +84,7 @@ function loadContracts() {
   } catch (_) {}
 }
 
-function saveContracts() {
+export function saveContracts() {
   const map = ({ address, abi }: ContractConfig) => ({ address, abi });
   const contracts = store.contracts.map(map);
   localStorage.setItem("contracts", JSON.stringify(contracts));

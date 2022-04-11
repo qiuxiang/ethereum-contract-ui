@@ -1,10 +1,11 @@
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Button, List, notification, Row, Tag, Typography } from "antd";
+import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { style } from "typestyle";
-import { ContractConfig, store } from "../store";
+import { ContractConfig, saveContracts, store } from "../store";
 
 export const Items = observer(() => {
   const { contracts } = store;
@@ -65,12 +66,23 @@ export const Items = observer(() => {
 });
 
 function deleteContract(item: ContractConfig) {
-  store.contracts.remove(item);
+  const index = store.contracts.indexOf(item);
+  runInAction(() => store.contracts.remove(item));
+  saveContracts();
+  const key = `delete-contract-${item.address}`;
   notification.warning({
+    key,
     message: "Contract deleted",
     description: item.address,
     btn: (
-      <Button type="primary" onClick={() => {}}>
+      <Button
+        type="primary"
+        onClick={() => {
+          runInAction(() => store.contracts.splice(index, 0, item));
+          saveContracts();
+          notification.close(key);
+        }}
+      >
         Undo
       </Button>
     ),
