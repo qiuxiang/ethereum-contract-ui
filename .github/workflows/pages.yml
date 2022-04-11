@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm i esbuild vite
-      - run: npm run build -- --minify && npx vite build
+      - run: npm run build -- --minify && npx vite build --base ./
       - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: gh-pages
