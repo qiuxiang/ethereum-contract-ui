@@ -8,7 +8,9 @@ import { style } from "typestyle";
 import { ContractConfig, saveContracts, store } from "../store";
 
 export const Items = observer(() => {
-  const contracts = store.contracts.filter((i) => i.chainId == store.chainId);
+  const contracts = store.contracts.filter(
+    (i) => store.allChains || i.chainId == store.chainId
+  );
   return (
     <List>
       {contracts.map((item) => {

@@ -8,7 +8,7 @@ import { Contract } from "ethers";
 import { observable, runInAction } from "mobx";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
-import { Chains } from "@w3u/chains";
+import { Chains, Metadata as ChainMetadata } from "@w3u/chains";
 
 export interface ContractConfig {
   abi: JsonFragment[];
@@ -23,6 +23,7 @@ const initialStore = {
   title: <React.ReactNode>"",
   subTitle: <React.ReactNode>"",
   chainId: 1,
+  allChains: false,
 };
 
 interface MetaMaskEthereumProvider {
@@ -34,6 +35,7 @@ interface OptionalStore {
   ethereum?: ExternalProvider & MetaMaskEthereumProvider;
   provider?: Web3Provider;
   signer?: JsonRpcSigner;
+  chain?: ChainMetadata;
 }
 
 export const store = observable<typeof initialStore & OptionalStore>(
@@ -45,17 +47,19 @@ export async function init() {
   store.ethereum = Reflect.get(window, "ethereum");
   const { ethereum } = store;
   if (ethereum) {
-    runInAction(() => {
-      store.provider = new Web3Provider(ethereum);
-      store.chainId = parseInt(ethereum.chainId, 16);
-      console.log(Chains[store.chainId]);
-    });
+    runInAction(() => (store.provider = new Web3Provider(ethereum)));
+    updateChain(ethereum.chainId);
     updateSigner((await store.provider?.listAccounts()) ?? []);
     ethereum.on("accountsChanged", updateSigner);
-    ethereum.on("chainChanged", (chainId) => {
-      runInAction(() => (store.chainId = parseInt(chainId, 16)));
-    });
+    ethereum.on("chainChanged", updateChain);
   }
+}
+
+function updateChain(chainId: string) {
+  runInAction(() => {
+    store.chainId = parseInt(chainId, 16);
+    store.chain = Chains[store.chainId];
+  });
 }
 
 function updateSigner([account]: string[]) {
@@ -104,6 +108,10 @@ export function saveContracts() {
   });
   const contracts = store.contracts.map(map);
   localStorage.setItem("contracts", JSON.stringify(contracts));
+}
+
+export function toggleAllChains(value: boolean) {
+  runInAction(() => (store.allChains = value));
 }
 
 init();

@@ -9,7 +9,7 @@ export const ChainSelect = (props: SelectProps<number>) => (
       return (
         <Select.Option key={id} value={parseInt(id)}>
           <Space>
-            <Image src={chain.icon} width={16} />
+            <Image src={chain.icon} width={16} fallback={Chains[1].icon} />
             {chain.name}
           </Space>
         </Select.Option>
