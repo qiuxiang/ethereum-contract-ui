@@ -7,32 +7,36 @@ import { store } from "../store";
 
 export const state = observable({
   abi: [] as JsonFragment[],
-  getter: [] as JsonFragment[],
-  setter: [] as JsonFragment[],
   contract: null as Contract | null,
   events: new Map<string, Event>(),
+  eventsFilter: {} as Record<string, boolean>,
+  eventsAbi: {} as Record<string, JsonFragment>,
 });
 
 export function mounted(address: string) {
   const contract = store.contracts.find((i) => i.address == address);
   if (!contract) return;
 
-  const functions = contract.abi.filter((i) => i.type == "function");
   runInAction(() => {
+    state.eventsAbi = {};
+    for (const event of contract.abi.filter((i) => i.type == "event")) {
+      state.eventsFilter[event.name!] = true;
+      state.eventsAbi[event.name!] = event;
+    }
+    state.abi = contract.abi;
     state.contract = contract.contract.connect(store.signer ?? store.provider!);
-    state.getter = functions.filter((i) => i.stateMutability == "view");
-    state.setter = functions.filter((i) => i.stateMutability != "view");
     store.title = "Contract";
     store.subTitle = <ExplorerLink type="address" value={address} />;
   });
   state.contract?.on({}, (event: Event) => {
-    if (!state.events.has(event.transactionHash)) {
-      runInAction(() => state.events.set(event.transactionHash, event));
+    const key = event.transactionHash + "#" + event.event;
+    if (!state.events.has(key)) {
+      runInAction(() => state.events.set(key, event));
     }
   });
 }
 
 export function unmount() {
   state.contract?.removeAllListeners();
-  state.events.clear();
+  runInAction(() => state.events.clear());
 }

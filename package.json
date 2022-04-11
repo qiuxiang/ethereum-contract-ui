@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "esbuild src/index.tsx --bundle --outdir=dist"
+    "build": "esbuild src/index.tsx --bundle --sourcemap --outdir=dist"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

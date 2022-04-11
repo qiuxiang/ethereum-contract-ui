@@ -14,7 +14,7 @@ export const ContractPage = observer(() => {
     return unmount;
   }, []);
 
-  const { getter, setter, contract } = state;
+  const { contract, abi } = state;
   if (!contract) {
     return (
       <Body>
@@ -23,6 +23,9 @@ export const ContractPage = observer(() => {
     );
   }
 
+  const functions = abi.filter((i) => i.type == "function");
+  const getter = functions.filter((i) => i.stateMutability == "view");
+  const setter = functions.filter((i) => i.stateMutability != "view");
   return (
     <Body>
       <Tabs onChange={() => {}}>

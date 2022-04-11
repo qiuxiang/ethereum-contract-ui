@@ -5,7 +5,7 @@ import { parseUnits } from "ethers/lib/utils";
 import * as React from "react";
 import { Outputs } from "./outputs";
 import { state } from "./state";
-import { Uint256Input } from "./uint256-input";
+import { Uint256Input } from "../components/uint256-input";
 
 export const FunctionForm = (props: JsonFragment) => {
   const { name, inputs, outputs, stateMutability } = props;
@@ -21,7 +21,7 @@ export const FunctionForm = (props: JsonFragment) => {
         });
         setLoading(true);
         try {
-          setOutput(await state.contract[name!](...values));
+          setOutput(await state.contract![name!](...values));
         } catch (e) {
           message.error((e as any).data?.message ?? (e as any).message);
         }
