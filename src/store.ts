@@ -8,11 +8,13 @@ import { Contract } from "ethers";
 import { observable, runInAction } from "mobx";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
+import { Chains } from "@w3u/chains";
 
 export interface ContractConfig {
   abi: JsonFragment[];
   address: string;
   contract: Contract;
+  chainId: number;
 }
 
 const initialStore = {
@@ -46,9 +48,13 @@ export async function init() {
     runInAction(() => {
       store.provider = new Web3Provider(ethereum);
       store.chainId = parseInt(ethereum.chainId, 16);
+      console.log(Chains[store.chainId]);
     });
     updateSigner((await store.provider?.listAccounts()) ?? []);
     ethereum.on("accountsChanged", updateSigner);
+    ethereum.on("chainChanged", (chainId) => {
+      runInAction(() => (store.chainId = parseInt(chainId, 16)));
+    });
   }
 }
 
@@ -66,9 +72,13 @@ export async function connectWallet() {
   } catch (_) {}
 }
 
-export function addContract(address: string, abi: JsonFragment[]) {
+export function addContract(
+  address: string,
+  abi: JsonFragment[],
+  chainId: number
+) {
   const contract = new Contract(address, abi, store.signer ?? store.provider);
-  store.contracts.push({ abi, address, contract });
+  store.contracts.push({ abi, address, contract, chainId });
   saveContracts();
 }
 
@@ -76,16 +86,22 @@ function loadContracts() {
   try {
     const contracts = JSON.parse(localStorage.getItem("contracts")!);
     runInAction(() => {
-      store.contracts = contracts.map(({ address, abi }: ContractConfig) => {
-        const contract = new Contract(address, abi);
-        return { abi, address, contract };
-      });
+      store.contracts = contracts.map(
+        ({ address, abi, chainId }: ContractConfig) => {
+          const contract = new Contract(address, abi);
+          return { abi, address, contract, chainId };
+        }
+      );
     });
   } catch (_) {}
 }
 
 export function saveContracts() {
-  const map = ({ address, abi }: ContractConfig) => ({ address, abi });
+  const map = ({ address, abi, chainId }: ContractConfig) => ({
+    address,
+    abi,
+    chainId,
+  });
   const contracts = store.contracts.map(map);
   localStorage.setItem("contracts", JSON.stringify(contracts));
 }

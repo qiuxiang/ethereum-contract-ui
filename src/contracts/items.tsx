@@ -8,7 +8,7 @@ import { style } from "typestyle";
 import { ContractConfig, saveContracts, store } from "../store";
 
 export const Items = observer(() => {
-  const { contracts } = store;
+  const contracts = store.contracts.filter((i) => i.chainId == store.chainId);
   return (
     <List>
       {contracts.map((item) => {
