@@ -13,13 +13,12 @@ export const state = observable({
   events: new Map<string, Event>(),
 });
 
-export function init(address: string) {
+export function mounted(address: string) {
   const contract = store.contracts.find((i) => i.address == address);
   if (!contract) return;
 
   const functions = contract.abi.filter((i) => i.type == "function");
   runInAction(() => {
-    state.events.clear();
     state.contract = contract.contract.connect(store.signer ?? store.provider!);
     state.getter = functions.filter((i) => i.stateMutability == "view");
     state.setter = functions.filter((i) => i.stateMutability != "view");
@@ -31,4 +30,9 @@ export function init(address: string) {
       runInAction(() => state.events.set(event.transactionHash, event));
     }
   });
+}
+
+export function unmount() {
+  state.contract?.removeAllListeners();
+  state.events.clear();
 }

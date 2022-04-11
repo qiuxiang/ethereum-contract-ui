@@ -13,7 +13,7 @@ export const Events = observer(() => (
 ));
 
 const Item = ({ item }: { item: Event }) => {
-  const { filters } = state.contract;
+  const { filters } = state.contract!;
   const eventName =
     Object.keys(filters).find((i) => i.startsWith(`${item.event}(`)) ??
     item.event;
@@ -27,7 +27,9 @@ const Item = ({ item }: { item: Event }) => {
           <ExplorerLink type="tx" value={item.transactionHash} />
         </Descriptions.Item>
         <Descriptions.Item label="Event">
-          <Tag color="blue">{eventName}</Tag>
+          <Tag style={{ fontFamily: "monospace" }} color="blue">
+            {eventName}
+          </Tag>
         </Descriptions.Item>
         <Descriptions.Item label="Data">
           {item.args?.toString()}

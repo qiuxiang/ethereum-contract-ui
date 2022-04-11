@@ -5,11 +5,14 @@ import { useMatch } from "react-router-dom";
 import { Body } from "../components/body";
 import { Events } from "./events";
 import { Functions } from "./functions";
-import { init, state } from "./state";
+import { mounted, state, unmount } from "./state";
 
 export const ContractPage = observer(() => {
   const address = useMatch("/contract/:address")?.params?.address;
-  React.useEffect(() => init(address ?? ""), []);
+  React.useEffect(() => {
+    mounted(address ?? "");
+    return unmount;
+  }, []);
 
   const { getter, setter, contract } = state;
   if (!contract) {
