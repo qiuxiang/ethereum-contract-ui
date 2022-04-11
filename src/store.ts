@@ -5,7 +5,6 @@ import {
   Web3Provider,
 } from "@ethersproject/providers";
 import { Contract } from "ethers";
-import { hexlify } from "ethers/lib/utils";
 import { observable, runInAction } from "mobx";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";

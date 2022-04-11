@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ContractPage } from "./contract";
 import { ContractsPage } from "./contracts";
-import "./index.css";
 import { MainLayout } from "./layout";
 import "./store";
 

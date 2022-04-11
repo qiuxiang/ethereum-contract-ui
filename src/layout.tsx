@@ -12,7 +12,7 @@ export const MainLayout = observer(() => {
   const { pathname } = useLocation();
   runInAction(() => (store.navigate = useNavigate()));
   return (
-    <Layout>
+    <Layout style={{ background: "none", fontFamily: "sans-serif" }}>
       <PageHeader
         onBack={pathname == "/" ? undefined : () => history.back()}
         title={title}
