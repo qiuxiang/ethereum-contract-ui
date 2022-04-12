@@ -4,7 +4,6 @@ import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { style } from "typestyle";
 import { ContractConfig, saveContracts, store } from "../store";
 
 export const Items = observer(() => {
@@ -31,7 +30,6 @@ export const Items = observer(() => {
           <Link to={`/contract/${address}`} key={address}>
             <List.Item style={{ paddingTop: 0, paddingBottom: 24 }}>
               <List.Item.Meta
-                className={css.item}
                 title={
                   <Row align="middle">
                     <span style={{ fontFamily: "monospace" }}>{address}</span>
@@ -90,9 +88,3 @@ function deleteContract(item: ContractConfig) {
     ),
   });
 }
-
-const css = {
-  item: style({
-    $nest: {},
-  }),
-};

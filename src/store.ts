@@ -8,7 +8,7 @@ import { Contract } from "ethers";
 import { observable, runInAction } from "mobx";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
-import { Chains, Metadata as ChainMetadata } from "@w3u/chains";
+import { chains, Chain } from "eth-chains";
 
 export interface ContractConfig {
   abi: JsonFragment[];
@@ -35,7 +35,7 @@ interface OptionalStore {
   ethereum?: ExternalProvider & MetaMaskEthereumProvider;
   provider?: Web3Provider;
   signer?: JsonRpcSigner;
-  chain?: ChainMetadata;
+  chain?: Chain;
 }
 
 export const store = observable<typeof initialStore & OptionalStore>(
@@ -58,7 +58,7 @@ export async function init() {
 function updateChain(chainId: string) {
   runInAction(() => {
     store.chainId = parseInt(chainId, 16);
-    store.chain = Chains[store.chainId];
+    store.chain = chains.get(store.chainId);
   });
 }
 

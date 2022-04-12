@@ -11,7 +11,7 @@ import { Items } from "./items";
 const AllChainsSwitch = observer(() => (
   <Switch
     checkedChildren="All Chains"
-    unCheckedChildren={store.chain?.displayName ?? store.chainId}
+    unCheckedChildren={store.chain?.name ?? store.chainId}
     checked={store.allChains}
     onChange={toggleAllChains}
   />

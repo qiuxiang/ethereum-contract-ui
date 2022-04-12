@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
+    "outDir": "dist",
     "strict": true,
     "target": "esnext",
+    "esModuleInterop": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "incremental": true,
     "jsx": "react"
   }
 }

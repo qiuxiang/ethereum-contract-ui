@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Chains } from "@w3u/chains";
 import { store } from "../store";
 import { observer } from "mobx-react-lite";
 
@@ -9,7 +8,7 @@ interface Props {
 }
 
 export const ExplorerLink = observer(({ type, value }: Props) => {
-  const url = Chains[store.chainId]?.explorer ?? "https://etherscan.io";
+  const url = store.chain?.explorers?.[0]?.url;
   return (
     <a href={`${url}/${type}/${value}`} target="_blank">
       {value}

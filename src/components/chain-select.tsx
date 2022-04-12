@@ -1,17 +1,14 @@
-import { Select, SelectProps, Image, Space } from "antd";
+import { Select, SelectProps, Space } from "antd";
+import { chains } from "eth-chains/dist/src/chains";
 import * as React from "react";
-import { Chains } from "@w3u/chains";
 
 export const ChainSelect = (props: SelectProps<number>) => (
   <Select {...props}>
-    {Object.keys(Chains).map((id) => {
-      const chain = Chains[parseInt(id)];
+    {Object.keys(chains).map((id) => {
+      const chain = chains[parseInt(id)];
       return (
         <Select.Option key={id} value={parseInt(id)}>
-          <Space>
-            <Image src={chain.icon} width={16} fallback={Chains[1].icon} />
-            {chain.name}
-          </Space>
+          <Space>{chain.name}</Space>
         </Select.Option>
       );
     })}
