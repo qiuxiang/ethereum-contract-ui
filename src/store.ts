@@ -1,14 +1,14 @@
 import { JsonFragment } from "@ethersproject/abi";
+import { Contract } from "@ethersproject/contracts";
 import {
   ExternalProvider,
   JsonRpcSigner,
   Web3Provider,
 } from "@ethersproject/providers";
-import { Contract } from "ethers";
+import { Chain, chains } from "eth-chains";
 import { observable, runInAction } from "mobx";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
-import { chains, Chain } from "eth-chains";
 
 export interface ContractConfig {
   abi: JsonFragment[];

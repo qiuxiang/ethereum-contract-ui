@@ -1,11 +1,11 @@
 import { SearchOutlined, SendOutlined } from "@ant-design/icons";
 import { JsonFragment } from "@ethersproject/abi";
+import { parseUnits } from "@ethersproject/units";
 import { Button, Form, Input, message } from "antd";
-import { parseUnits } from "ethers/lib/utils";
 import * as React from "react";
+import { Uint256Input } from "../components/uint256-input";
 import { Outputs } from "./outputs";
 import { state } from "./state";
-import { Uint256Input } from "../components/uint256-input";
 
 export const FunctionForm = (props: JsonFragment) => {
   const { name, inputs, outputs, stateMutability } = props;

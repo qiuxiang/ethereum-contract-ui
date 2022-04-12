@@ -1,5 +1,5 @@
+import { Event } from "@ethersproject/contracts";
 import { Button, Descriptions, List, Row, Space, Typography } from "antd";
-import { Event } from "ethers";
 import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
